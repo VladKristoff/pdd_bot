@@ -1,7 +1,7 @@
 from keyboards.menu import main_keyboard
 from aiogram.types import CallbackQuery
 from aiogram import F, Router
-from keyboards.menu import make_tickets_keyboard
+from keyboards.menu import make_tickets_list
 import asyncio
 
 menu_router = Router()
@@ -11,4 +11,4 @@ menu_router = Router()
 async def show_tickets(callback: CallbackQuery):
     await callback.answer(text="Вы выбрали решать билеты")
     await callback.message.answer(text="Выберите билет, который хотите решить",
-                                  reply_markup=await make_tickets_keyboard())
+                                  reply_markup=await make_tickets_list())
