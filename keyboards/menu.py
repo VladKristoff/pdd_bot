@@ -17,10 +17,9 @@ async def make_tickets_list():
 
 async def make_question_keyboard(question):
     question_keyboard = InlineKeyboardBuilder()
-    for i, answer in enumerate(question.answers):
-        question_keyboard.add(InlineKeyboardButton(text=answer['answer_text'],
-                                                   callback_data=f"answer_{i}"))
-    return question_keyboard.adjust(1).as_markup()
+    for i in range(1, len(question.answers) + 1):
+        question_keyboard.add(InlineKeyboardButton(text=f"{i}", callback_data=f"answer{i}"))
+    return question_keyboard.adjust(len(question.answers)).as_markup()
 
 question_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Назад", callback_data="back"),

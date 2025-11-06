@@ -26,4 +26,17 @@ async def start_ticket1(callback: CallbackQuery, state: FSMContext):
     await show_question(callback, questions[0])
 
 
+@ticket_router.callback_query(F.data == "ticket2")
+async def start_ticket1(callback: CallbackQuery, state: FSMContext):
+    ticket_data = await start_ticket("Билет 2")
+    questions = read_ticket(ticket_data)
 
+    await state.update_data(
+        current_ticket=2,
+        questions=questions,
+        current_questions_inxex=0,
+        user_answers=[]
+    )
+
+    await state.set_state(TestStates.waiting_answer)
+    await show_question(callback, questions[0])
