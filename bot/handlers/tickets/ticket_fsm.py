@@ -1,5 +1,7 @@
+import os
+
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, FSInputFile
 from database.models import Question
 from aiogram.types import KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -16,16 +18,28 @@ async def show_question(callback: CallbackQuery, question: Question):
 
     await callback.message.delete()
     if question.image_path != "./images/no_image.jpg":
-        with open(f"{question.image_path}", "rb") as photo:
-            await callback.message.answer_photo(photo=f"{photo}",
-                                                caption=(
-                                                        f"Вопрос №{question.question_number_in_ticket}\n"
-                                                        f"{question.question_text}\n\n"
-                                                        + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in
-                                                                    enumerate(question.answers, 1))),
-                                                reply_markup=keyboard)
+        try:
+            photo = FSInputFile(question.image_path)
+            await callback.message.answer_photo(
+                photo=photo,
+                caption=(
+                        f"Вопрос №{question.question_number_in_ticket}\n"
+                        f"{question.question_text}\n\n"
+                        + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1))
+                ),
+                reply_markup=keyboard
+            )
+        except Exception as e:
+            print(f"Не удалось отправить картинку {e}")
+            await send_text_question(callback, question, keyboard)
     else:
-        await callback.message.answer(text=f"Вопрос №{question.question_number_in_ticket}\n"
-                                            f"{question.question_text}\n\n"
-                                            + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1)),
-                                            reply_markup=keyboard)
+        await send_text_question(callback, question, keyboard)
+
+
+async def send_text_question(callback: CallbackQuery, question: Question, keyboard):
+    await callback.message.answer(
+        text=f"Вопрос №{question.question_number_in_ticket}\n"
+             f"{question.question_text}\n\n"
+             + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1)),
+        reply_markup=keyboard
+    )

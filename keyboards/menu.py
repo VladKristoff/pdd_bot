@@ -11,7 +11,7 @@ main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
 async def make_tickets_list():
     tickets_keyboard = InlineKeyboardBuilder()
     for number in range(1, 41):
-        tickets_keyboard.add(InlineKeyboardButton(text=str(number), callback_data=f"ticket{str(number)}"))
+        tickets_keyboard.add(InlineKeyboardButton(text=str(number), callback_data=f"ticket_{number}"))
     return tickets_keyboard.adjust(5).as_markup()
 
 
