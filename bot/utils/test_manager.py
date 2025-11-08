@@ -1,21 +1,55 @@
 import asyncpg
 import asyncio
-from database.db import connect_db
 from database.models import Question
-import json
+from repositories.question_repository import QuestionRepository
+from typing import List, Dict, Optional
 
 
-def read_ticket(ticket_data):
-    questions = []
-    for i, question in enumerate(ticket_data, 1):
-        question_data = Question(id=question['id'],
-                                 question_text=question['question_text'],
-                                 answers=json.loads(question['answers']),
-                                 correct_answer=question['correct_answer'],
-                                 image_path=question['image_path'],
-                                 answer_explanation=question['answer_explanation'],
-                                 question_number_in_ticket=question['question_number_in_ticket'])
+class TestManager:
+    def __init__(self, question_repository: QuestionRepository):
+        self.question_repository = question_repository
+        self.current_question_index: int = 0
+        self.questions: List[Question] = []
+        self.user_answers: Dict[int, str] = {}
 
-        questions.append(question_data)
+    async def start_ticket(self, ticket_number: str):
+        self.questions = await self.question_repository.get_ticket_questions(ticket_number)
+        print(self.questions)
+        self.user_answers.clear()
+        return self.get_current_question()
 
-        return questions
+    def get_current_question(self) -> Optional[Question]:
+        if self.questions and 0 <= self.current_question_index < len(self.questions):
+            print(self.questions[self.current_question_index])
+            return self.questions[self.current_question_index]
+        return None
+
+    def next_question(self) -> Optional[Question]:
+        if self.current_question_index - len(self.questions) - 1:
+            self.current_question_index += 1
+            return self.get_current_question()
+        return None
+
+    def previous_question(self) -> Optional[Question]:
+        if self.current_question_index > 0:
+            self.current_question_index -= 1
+            return self.get_current_question()
+        return None
+
+    def save_answer(self, answer: str):
+        self.user_answers[self.current_question_index] = answer
+
+    def get_results(self) -> Dict:
+        correct = 0
+        total = len(self.questions)
+
+        for i, question in enumerate(self.questions):
+            if self.user_answers.get(i) == question.correct_answer:
+                correct += 1
+
+        return {
+            "correct": correct,
+            "total": total,
+            "percentage": (correct / total) * 100 if total > 0 else 0
+        }
+

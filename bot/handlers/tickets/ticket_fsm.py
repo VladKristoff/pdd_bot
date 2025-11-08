@@ -1,5 +1,6 @@
 import os
 
+from typing import Dict, List
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, FSInputFile
 from database.models import Question
@@ -43,3 +44,13 @@ async def send_text_question(callback: CallbackQuery, question: Question, keyboa
              + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1)),
         reply_markup=keyboard
     )
+
+
+def get_correct_answer_id(question: Question):
+    for i, answer in enumerate(question.answers):
+        if answer['is_correct']:
+            print(question.id)
+            print(i)
+            return i+1
+
+    raise ValueError(f"Не найден правильный ответ для вопроса: {question.id}")

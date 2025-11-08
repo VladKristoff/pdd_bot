@@ -1,6 +1,5 @@
 import asyncio
 import os
-
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from bot.handlers.start import start_router

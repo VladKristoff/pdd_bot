@@ -21,6 +21,7 @@ async def make_question_keyboard(question):
         question_keyboard.add(InlineKeyboardButton(text=f"{i}", callback_data=f"answer{i}"))
     return question_keyboard.adjust(len(question.answers)).as_markup()
 
+
 question_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Назад", callback_data="back"),
      InlineKeyboardButton(text="Следующий", callback_data="next")]
