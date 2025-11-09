@@ -1,11 +1,6 @@
-import os
-
-from typing import Dict, List
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, FSInputFile
 from database.models import Question
-from aiogram.types import KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from keyboards.menu import make_question_keyboard
 
 
@@ -49,8 +44,6 @@ async def send_text_question(callback: CallbackQuery, question: Question, keyboa
 def get_correct_answer_id(question: Question):
     for i, answer in enumerate(question.answers):
         if answer['is_correct']:
-            print(question.id)
-            print(i)
             return i+1
 
     raise ValueError(f"Не найден правильный ответ для вопроса: {question.id}")

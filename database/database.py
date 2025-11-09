@@ -28,5 +28,9 @@ class Database:
         async with self.pool.acquire() as conn:
             return await conn.fetchrow(query, *args)
 
+    async def execute(self, query, *args):
+        async with self.pool.acquire() as conn:
+            return await self.pool.execute(query, *args)
+
 
 db = Database()
