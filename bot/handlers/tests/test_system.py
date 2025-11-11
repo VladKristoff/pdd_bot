@@ -5,7 +5,7 @@ from keyboards.menu import make_question_keyboard
 
 
 class TestStates(StatesGroup):
-    waiting_answer = State()
+    waiting_for_answer = State()
     showing_explanation = State()
 
 
@@ -42,8 +42,9 @@ async def send_text_question(callback: CallbackQuery, question: Question, keyboa
 
 
 def get_correct_answer_id(question: Question):
+    print(question)
     for i, answer in enumerate(question.answers):
         if answer['is_correct']:
-            return i+1
+            return i + 1
 
     raise ValueError(f"Не найден правильный ответ для вопроса: {question.id}")

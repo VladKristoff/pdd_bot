@@ -24,9 +24,27 @@ class QuestionRepository:
 
         return questions
 
+    async def get_topic_questions(self, topic_id: int) -> List[Question]:
+        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
+        ticket_data = await db.fetch("SELECT * FROM questions WHERE topic_id = $1", topic_id)
+
+        questions = []
+        for i, question in enumerate(ticket_data, 1):
+            question_data = Question(id=question['id'],
+                                     question_text=question['question_text'],
+                                     answers=json.loads(question['answers']),
+                                     correct_answer=question['correct_answer'],
+                                     image_path=question['image_path'],
+                                     answer_explanation=question['answer_explanation'],
+                                     question_number_in_ticket=question['question_number_in_ticket'])
+
+            questions.append(question_data)
+
+        return questions
+
     async def get_question_by_id(self, question_id: str) -> Question:
         await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
-        record = await db.fetchrow("SELECT * FROM questions WHERE id = $1", question_id)
+        record = await db.fetcher("SELECT * FROM questions WHERE id = $1", question_id)
         if record:
             return Question(
                 id=record['id'],
@@ -38,5 +56,22 @@ class QuestionRepository:
                 question_number_in_ticket=record['question_number_in_ticket']
             )
 
+    async def get_all_questions(self) -> List[Question]:
+        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
+        ticket_data = await db.fetch("SELECT * FROM questions")
+
+        questions = []
+        for i, question in enumerate(ticket_data, 1):
+            question_data = Question(id=question['id'],
+                                     question_text=question['question_text'],
+                                     answers=json.loads(question['answers']),
+                                     correct_answer=question['correct_answer'],
+                                     image_path=question['image_path'],
+                                     answer_explanation=question['answer_explanation'],
+                                     question_number_in_ticket=question['question_number_in_ticket'])
+
+            questions.append(question_data)
+
+        return questions
 
 question_repository = QuestionRepository()

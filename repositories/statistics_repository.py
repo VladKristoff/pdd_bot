@@ -12,7 +12,6 @@ class StatisticsRepository:
         correct_from_ticket = results['correct']
 
         is_user = await db.fetcher("SELECT * FROM users WHERE id = $1", str(user.id))
-        print(is_user)
         if is_user:
             total = total_from_ticket + is_user['total_questions']
             correct = correct_from_ticket + is_user['correct_answers']
@@ -39,7 +38,6 @@ class StatisticsRepository:
         await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
 
         is_user = await db.fetcher("SELECT * FROM users WHERE id = $1", str(user.id))
-        print(is_user)
         if is_user:
             return is_user
         else:

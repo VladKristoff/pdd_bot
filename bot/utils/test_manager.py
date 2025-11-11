@@ -1,5 +1,3 @@
-import asyncpg
-import asyncio
 from database.models import Question
 from repositories.question_repository import QuestionRepository
 from typing import List, Dict, Optional
@@ -15,6 +13,20 @@ class TestManager:
     async def start_ticket(self, ticket_number: str):
         self.current_question_index = 0
         self.questions = await self.question_repository.get_ticket_questions(ticket_number)
+        self.user_answers.clear()
+        return self.get_current_question()
+
+    async def start_topic(self, topic_number: int):
+        self.current_question_index = 0
+        self.questions = await self.question_repository.get_topic_questions(topic_number)
+        if not self.questions:
+            raise ValueError(f"Тема {topic_number} не содержит вопросов или не существует")
+        self.user_answers.clear()
+        return self.get_current_question()
+
+    async def start_marathon(self):
+        self.current_question_index = 0
+        self.questions = await self.question_repository.get_all_questions()
         self.user_answers.clear()
         return self.get_current_question()
 
@@ -41,7 +53,6 @@ class TestManager:
     def get_results(self) -> Dict:
         correct = 0
         total = len(self.questions)
-        print(self.user_answers)
         for i, question in enumerate(self.questions):
             user_answer = self.user_answers.get(i)
             if f"Правильный ответ: {user_answer}" == question.correct_answer:
@@ -52,4 +63,3 @@ class TestManager:
             "total": total,
             "percentage": (correct / total) * 100 if total > 0 else 0
         }
-

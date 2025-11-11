@@ -4,14 +4,17 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from bot.handlers.start import start_router
 from bot.handlers.menu import menu_router
-from bot.handlers.tickets.tickets import ticket_router
+from bot.handlers.tests.topics import topic_router
+from bot.handlers.tests.tickets import ticket_router
 from bot.utils.command_menu import commands
+from aiogram.fsm.storage.memory import MemoryStorage
 
 load_dotenv(dotenv_path="misc/.env")
 TOKEN = os.getenv("TOKEN")
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher()
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
 
 
 async def main():
@@ -20,6 +23,7 @@ async def main():
     dp.include_router(start_router)
     dp.include_router(menu_router)
     dp.include_router(ticket_router)
+    dp.include_router(topic_router)
 
     await dp.start_polling(bot)
 

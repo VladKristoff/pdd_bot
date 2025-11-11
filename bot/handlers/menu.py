@@ -1,6 +1,6 @@
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
-from keyboards.menu import make_tickets_list
+from keyboards.menu import make_tickets_list, make_topics_list
 from repositories.statistics_repository import statistics_repository
 
 menu_router = Router()
@@ -20,6 +20,18 @@ async def show_tickets_command(message: Message):
     )
 
 
+@menu_router.callback_query(F.data == "topics")
+async def show_tickets(callback: CallbackQuery):
+    await callback.message.edit_text(text="Выберите тему, вопросы по которой хотите пройти",
+                                     reply_markup=await make_topics_list())
+
+
+@menu_router.message(F.text == "/topics")
+async def show_topics(message: Message):
+    await message.answer(text="Выберите тему, вопросы по которой хотите пройти",
+                         reply_markup=await make_topics_list())
+
+
 @menu_router.callback_query(F.data == "stats")
 async def show_user_stats(callback: CallbackQuery):
     user = callback.from_user
@@ -31,10 +43,11 @@ async def show_user_stats(callback: CallbackQuery):
     success_rate = (correct_answers / total_questions * 100) if total_questions > 0 else 0
 
     await callback.message.answer(
-        f"📊 Статистика:\n"
-        f"✅ Вопросов: {total_questions}\n"
-        f"🎯 Правильно: {correct_answers}\n"
-        f"📈 Успех: {success_rate:.1f}%"
+        f"<b>📊 Статистика:\n\n</b>"
+        f"✅ Всего решено вопросов: {total_questions}\n"
+        f"🎯 Правильных ответов: {correct_answers}\n\n"
+        f"📈 Процент правильный ответов: {success_rate:.1f}%",
+        parse_mode="HTML"
     )
 
 
@@ -49,8 +62,9 @@ async def show_user_stats(message: Message):
     success_rate = (correct_answers / total_questions * 100) if total_questions > 0 else 0
 
     await message.answer(
-        f"📊 Статистика:\n\n"
+        f"<b>📊 Статистика:\n\n</b>"
         f"✅ Всего решено вопросов: {total_questions}\n"
         f"🎯 Правильных ответов: {correct_answers}\n\n"
-        f"📈 Процент правильный ответов: {success_rate:.1f}%"
+        f"📈 Процент правильный ответов: {success_rate:.1f}%",
+        parse_mode="HTML"
     )
