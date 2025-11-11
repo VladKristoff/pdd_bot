@@ -92,7 +92,7 @@ async def user_answer(callback: CallbackQuery, state: FSMContext):
     correct_answer_number = get_correct_answer_id(current_question) # 1-based
     is_correct = (answer_id == correct_answer_number)
     correct_answer_text = current_question.answers[correct_answer_number - 1]['answer_text']
-    result_msg = "✔️ Правильно!" if is_correct else "❌ Неправильно!"
+    result_msg = "✅ Правильно!" if is_correct else "❌ Неправильно!"
     full_msg = (
         f"{result_msg}\n"
         f"Правильный ответ: {correct_answer_text}\n\n"
