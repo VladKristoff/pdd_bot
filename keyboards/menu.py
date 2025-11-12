@@ -64,3 +64,7 @@ async def make_question_keyboard(question):
 question_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Следующий", callback_data="next")]
 ])
+
+statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
+])

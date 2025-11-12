@@ -53,5 +53,23 @@ class StatisticsRepository:
 
             return await db.fetcher("SELECT * FROM users WHERE id = $1", str(user.id))
 
+    async def reset_user_stats(self, user):
+        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
+
+        try:
+            await db.execute("""
+                            UPDATE users 
+                            SET total_questions = 0, 
+                                correct_answers = 0,
+                                username = $1,
+                                fullname = $2
+                            WHERE id = $3
+                            """,user.username, user.full_name, str(user.id))
+
+            return "Статистика успешно сброшена"
+        except Exception as e:
+            print(f"Ошибка в сбросе статистики: {e}")
+            return None
+
 
 statistics_repository = StatisticsRepository()
