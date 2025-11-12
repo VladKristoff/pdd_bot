@@ -35,7 +35,7 @@ class TestManager:
             return self.questions[self.current_question_index]
         return None
 
-    def next_question(self) -> Optional[Question]:
+    def next_question(self):
         if self.current_question_index < len(self.questions) - 1:
             self.current_question_index += 1
             return self.get_current_question()

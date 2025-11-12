@@ -9,7 +9,7 @@ class TestStates(StatesGroup):
     showing_explanation = State()
 
 
-async def show_question(callback: CallbackQuery, question: Question):
+async def show_question(callback: CallbackQuery, question: Question, len_questions: int, current_question_index: int):
     keyboard = await make_question_keyboard(question)
 
     await callback.message.delete()
@@ -19,7 +19,7 @@ async def show_question(callback: CallbackQuery, question: Question):
             await callback.message.answer_photo(
                 photo=photo,
                 caption=(
-                        f"Вопрос №{question.question_number_in_ticket}\n"
+                        f"Вопрос {current_question_index + 1} из {len_questions}\n"
                         f"{question.question_text}\n\n"
                         + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1))
                 ),
@@ -27,14 +27,14 @@ async def show_question(callback: CallbackQuery, question: Question):
             )
         except Exception as e:
             print(f"Не удалось отправить картинку {e}")
-            await send_text_question(callback, question, keyboard)
+            await send_text_question(callback, question, keyboard, current_question_index, len_questions)
     else:
-        await send_text_question(callback, question, keyboard)
+        await send_text_question(callback, question, keyboard, current_question_index, len_questions)
 
 
-async def send_text_question(callback: CallbackQuery, question: Question, keyboard):
+async def send_text_question(callback: CallbackQuery, question: Question, keyboard, current_question_index: int, len_questions: int):
     await callback.message.answer(
-        text=f"Вопрос №{question.question_number_in_ticket}\n"
+        text=f"Вопрос {current_question_index + 1} из {len_questions}\n"
              f"{question.question_text}\n\n"
              + "\n".join(f"{i}. {ans['answer_text']}" for i, ans in enumerate(question.answers, 1)),
         reply_markup=keyboard
@@ -42,7 +42,6 @@ async def send_text_question(callback: CallbackQuery, question: Question, keyboa
 
 
 def get_correct_answer_id(question: Question):
-    print(question)
     for i, answer in enumerate(question.answers):
         if answer['is_correct']:
             return i + 1

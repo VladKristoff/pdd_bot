@@ -49,7 +49,7 @@ async def make_topics_list():
         "Остановка и стоянка"
     ]
     for i, topic in enumerate(topics):
-        topics_keyboard.add(InlineKeyboardButton(text=f"{topic}", callback_data=f"topic_{i}"))
+        topics_keyboard.add(InlineKeyboardButton(text=f"{topic}", callback_data=f"topic_{i+1}"))
 
     return topics_keyboard.adjust(1).as_markup()
 
@@ -63,4 +63,8 @@ async def make_question_keyboard(question):
 
 question_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Следующий", callback_data="next")]
+])
+
+statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
 ])

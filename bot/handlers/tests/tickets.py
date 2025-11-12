@@ -44,7 +44,7 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
 
         await state.update_data(test_manager=test_manager)
         await state.set_state(TestStates.waiting_for_answer)
-        await show_question(callback, question)
+        await show_question(callback, question, len(test_manager.questions), test_manager.current_question_index)
 
     else:
         try:
@@ -55,7 +55,7 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
 
             await state.update_data(test_manager=test_manager)
             await state.set_state(TestStates.waiting_for_answer)
-            await show_question(callback, question)
+            await show_question(callback, question, len(test_manager.questions), test_manager.current_question_index)
         except ValueError:
             await callback.answer("Ошибка в начале марафона")
 
@@ -124,7 +124,7 @@ async def next_question(callback: CallbackQuery, state: FSMContext):
     if next_q:
         await state.update_data(test_manager=test_manager)
         await state.set_state(TestStates.waiting_for_answer)
-        await show_question(callback, next_q)
+        await show_question(callback, next_q, len(test_manager.questions), test_manager.current_question_index)
     else:
         # Тест окончен
         results = test_manager.get_results()

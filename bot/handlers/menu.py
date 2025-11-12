@@ -1,6 +1,6 @@
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
-from keyboards.menu import make_tickets_list, make_topics_list
+from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard
 from repositories.statistics_repository import statistics_repository
 
 menu_router = Router()
@@ -47,7 +47,8 @@ async def show_user_stats(callback: CallbackQuery):
         f"✅ Всего решено вопросов: {total_questions}\n"
         f"🎯 Правильных ответов: {correct_answers}\n\n"
         f"📈 Процент правильный ответов: {success_rate:.1f}%",
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=statistic_menu_keyboard
     )
 
 
@@ -66,5 +67,6 @@ async def show_user_stats(message: Message):
         f"✅ Всего решено вопросов: {total_questions}\n"
         f"🎯 Правильных ответов: {correct_answers}\n\n"
         f"📈 Процент правильный ответов: {success_rate:.1f}%",
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=statistic_menu_keyboard
     )

@@ -9,8 +9,12 @@ start_router = Router()
 @start_router.message(CommandStart())
 async def start_bot(message: Message):
     user = message.from_user
-    await message.answer(text=
-                         f"""Рады видеть вас, <b>{user.first_name}!</b>
-Этот бот поможет тебе выучить теорию ПДД""",
+    await message.answer(text = f"""
+Рады видеть вас, <b>{user.first_name}</b>! 
+
+Этот бот поможет вам выучить теорию ПДД
+
+👇 <b>Выберите действие:</b> 👇
+""",
                          parse_mode="HTML",
                          reply_markup=main_keyboard)
