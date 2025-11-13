@@ -8,7 +8,8 @@
 
 | Главное меню | Выбор билета |
 |:------------:|:----------------:|
-| ![Главное меню](https://github.com/user-attachments/assets/a8f1e667-11af-4527-b979-e1d171e2922f) | ![Билеты](https://github.com/user-attachments/assets/a7c3470c-9f73-4468-95b8-f23c64a84f60") />
+| ![Главное меню](https://github.com/user-attachments/assets/a8f1e667-11af-4527-b979-e1d171e2922f) | <img alt="image" src="https://github.com/user-attachments/assets/b11faf97-cdc8-42c9-91e3-9a35857a6d7d"/>
+ />
 ) |
 
 | Вопрос | Статистика |
