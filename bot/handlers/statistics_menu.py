@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery
 from aiogram.exceptions import TelegramBadRequest
 from aiogram import F, Router
-from repositories.statistics_repository import statistics_repository
+from requests.statistics_requests import statistics_repository
 from keyboards.menu import statistic_menu_keyboard
 
 

@@ -3,8 +3,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
 from .test_system import TestStates, show_question, get_correct_answer_id
-from repositories.statistics_repository import statistics_repository
-from repositories.question_repository import question_repository
+from requests.statistics_requests import statistics_repository
+from requests.question_requests import question_repository
 from keyboards.menu import question_menu_keyboard
 from aiogram.fsm.context import FSMContext
 
@@ -71,7 +71,7 @@ async def user_answer(callback: CallbackQuery, state: FSMContext):
         return
 
     try:
-        await callback.message.edit_reply_markup(reply_markup=None)
+        await callback.message.delete()
     except TelegramBadRequest:
         pass
 

@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
 from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard
-from repositories.statistics_repository import statistics_repository
+from requests.statistics_requests import statistics_repository
 
 menu_router = Router()
 

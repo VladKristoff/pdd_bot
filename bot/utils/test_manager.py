@@ -1,5 +1,5 @@
 from database.models import Question
-from repositories.question_repository import QuestionRepository
+from requests.question_requests import QuestionRepository
 from typing import List, Dict, Optional
 
 
