@@ -5,7 +5,7 @@ from requests.question_requests import question_repository
 main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="📋Билеты", callback_data="tickets"),
      InlineKeyboardButton(text="📚Темы", callback_data="topics")],
-    [InlineKeyboardButton(text="🏃‍♂️Марафон (все 800 вопросов подряд)", callback_data="ticket_marathon")],
+    [InlineKeyboardButton(text="🏃‍♂️Марафон (800 вопросов подряд)", callback_data="ticket_marathon")],
     [InlineKeyboardButton(text="📈Просмотреть статистику", callback_data="stats")]
 ])
 

@@ -130,6 +130,7 @@ async def next_question(callback: CallbackQuery, state: FSMContext):
         results = test_manager.get_results()
         user = callback.from_user
         await statistics_repository.update_user_stats(results, user)
+        await statistics_repository.update_streak(user)
 
         await callback.message.answer(
             f"<b>📊 Тест завершён!</b>\n"
