@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from keyboards.menu import main_keyboard
-from requests.statistics_requests import statistics_repository
+from bot.utils.streak_manager import streak_manager
 
 start_router = Router()
 
@@ -10,14 +10,19 @@ start_router = Router()
 async def start_bot(message: Message):
     user = message.from_user
 
+    # Сбрасываем стрик, если пользователь пропустил день
+    await streak_manager.check_streak(user)
+
     # Создаём текст сообщения
-    streak = await statistics_repository.get_streak(user)
+    streak = await streak_manager.get_streak(user)
 
     if streak is not None:
         if streak > 0:
             text = f"<b>Ваша серия: {streak} 🔥</b>"
         else:
-            text = f"Решайте билеты каждый день, чтобы накопить серию, текущая серия: {streak}"
+            text = f"""Решайте билеты каждый день, чтобы накопить серию 
+            
+<b>Ваша серия: {streak}</b>"""
     else:
         text = "Не удалось получить серию"
 

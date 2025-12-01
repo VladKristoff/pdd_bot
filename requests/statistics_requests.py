@@ -1,11 +1,8 @@
 from database.database import db
-from datetime import date
 
 
-class StatisticsRepository:
+class StatisticsRequests:
     async def update_user_stats(self, results, user):
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
-
         total_from_ticket = results['total']
         correct_from_ticket = results['correct']
 
@@ -33,8 +30,6 @@ class StatisticsRepository:
         print("Статистика успешно сохранена в БД")
 
     async def get_user_stats(self, user):
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
-
         is_user = await db.fetcher("SELECT * FROM users WHERE id = $1", str(user.id))
         if is_user:
             return is_user
@@ -52,8 +47,6 @@ class StatisticsRepository:
             return await db.fetcher("SELECT * FROM users WHERE id = $1", str(user.id))
 
     async def reset_user_stats(self, user):
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
-
         try:
             await db.execute("""
                             UPDATE users 
@@ -69,40 +62,4 @@ class StatisticsRepository:
             print(f"Ошибка в сбросе статистики: {e}")
             return None
 
-    async def get_streak(self, user):
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
-
-        try:
-            record =  await db.fetcher("SELECT streak FROM users WHERE id = $1", str(user.id))
-            return record['streak']
-        except Exception as e:
-            print(f"Ошибка в получении стрика: {e}")
-            return None
-
-    async def update_streak(self, user):
-        today = date.today()
-
-        try:
-            user_streak_and_date = await db.fetcher("SELECT streak, last_solved_date FROM users WHERE id = $1", str(user.id))
-        except Exception as e:
-            user_streak_and_date = None
-            print(f"Не удалось получить стрик и дату: {e}, user_streak_and_date = None")
-
-        if user_streak_and_date['last_solved_date'] == today:
-            streak = user_streak_and_date['streak']
-        elif user_streak_and_date['last_solved_date'] == today.replace(day=today.day - 1):
-            streak = user_streak_and_date['streak'] + 1
-        else:
-            streak = 1
-
-        try:
-            await db.execute("""UPDATE users 
-            SET streak = $1, last_solved_date = $2
-            WHERE id = $3
-            """, streak, today, str(user.id))
-
-        except Exception as e:
-            print(f"Не удалось обновить стрик: {e}")
-
-
-statistics_repository = StatisticsRepository()
+statistics_requests = StatisticsRequests()

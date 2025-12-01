@@ -10,6 +10,7 @@ from bot.handlers.tests.tickets import ticket_router
 from bot.handlers.statistics_menu import stats_router
 from bot.utils.command_menu import commands
 from aiogram.fsm.storage.memory import MemoryStorage
+from database.database import db
 
 logging.basicConfig(level=logging.INFO)
 
@@ -29,6 +30,7 @@ async def main():
     dp.include_router(topic_router)
     dp.include_router(stats_router)
 
+    await db.connect()
     await dp.start_polling(bot)
 
 

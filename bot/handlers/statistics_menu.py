@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery
 from aiogram.exceptions import TelegramBadRequest
 from aiogram import F, Router
-from requests.statistics_requests import statistics_repository
+from requests.statistics_requests import statistics_requests
 from keyboards.menu import statistic_menu_keyboard
 
 
@@ -11,9 +11,9 @@ stats_router = Router()
 async def reset_stats(callback: CallbackQuery):
     user = callback.from_user
     try:
-        await statistics_repository.reset_user_stats(user)
+        await statistics_requests.reset_user_stats(user)
         await callback.answer("Статистика успешно сброшена")
-        user_stats = await statistics_repository.get_user_stats(user)
+        user_stats = await statistics_requests.get_user_stats(user)
 
         total_questions = user_stats['total_questions']
         correct_answers = user_stats['correct_answers']

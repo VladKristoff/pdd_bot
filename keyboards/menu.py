@@ -1,6 +1,6 @@
 from aiogram.types import KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from requests.question_requests import question_repository
+from requests.question_requests import question_requests
 
 main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="📋Билеты", callback_data="tickets"),

@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
 from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard
-from requests.statistics_requests import statistics_repository
+from requests.statistics_requests import statistics_requests
 
 menu_router = Router()
 
@@ -36,7 +36,7 @@ async def show_topics(message: Message):
 async def show_user_stats(callback: CallbackQuery):
     user = callback.from_user
 
-    user_stats = await statistics_repository.get_user_stats(user)
+    user_stats = await statistics_requests.get_user_stats(user)
 
     total_questions = user_stats['total_questions']
     correct_answers = user_stats['correct_answers']
@@ -56,7 +56,7 @@ async def show_user_stats(callback: CallbackQuery):
 async def show_user_stats(message: Message):
     user = message.from_user
 
-    user_stats = await statistics_repository.get_user_stats(user)
+    user_stats = await statistics_requests.get_user_stats(user)
 
     total_questions = user_stats['total_questions']
     correct_answers = user_stats['correct_answers']

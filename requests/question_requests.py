@@ -4,10 +4,8 @@ import json
 from typing import List
 
 
-class QuestionRepository:
-
+class QuestionRequests:
     async def get_ticket_questions(self, ticket_number: str) -> List[Question]:
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
         ticket_data = await db.fetch("SELECT * FROM questions WHERE ticket_number = $1", ticket_number)
 
         questions = []
@@ -25,7 +23,6 @@ class QuestionRepository:
         return questions
 
     async def get_topic_questions(self, topic_id: int) -> List[Question]:
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
         ticket_data = await db.fetch("SELECT * FROM questions WHERE topic_id = $1", topic_id)
 
         questions = []
@@ -43,7 +40,6 @@ class QuestionRepository:
         return questions
 
     async def get_question_by_id(self, question_id: str) -> Question:
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
         record = await db.fetcher("SELECT * FROM questions WHERE id = $1", question_id)
         if record:
             return Question(
@@ -57,7 +53,6 @@ class QuestionRepository:
             )
 
     async def get_all_questions(self) -> List[Question]:
-        await db.connect("postgres", "1234", "pdd_database", "localhost", "5432")
         ticket_data = await db.fetch("SELECT * FROM questions")
 
         questions = []
@@ -74,4 +69,4 @@ class QuestionRepository:
 
         return questions
 
-question_repository = QuestionRepository()
+question_requests = QuestionRequests()

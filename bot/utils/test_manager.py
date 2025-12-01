@@ -1,10 +1,10 @@
 from database.models import Question
-from requests.question_requests import QuestionRepository
+from requests.question_requests import QuestionRequests
 from typing import List, Dict, Optional
 
 
 class TestManager:
-    def __init__(self, question_repository: QuestionRepository):
+    def __init__(self, question_repository: QuestionRequests):
         self.question_repository = question_repository
         self.current_question_index: int = 0
         self.questions: List[Question] = []

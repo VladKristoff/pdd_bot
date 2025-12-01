@@ -3,11 +3,12 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
 from .test_system import show_question, get_correct_answer_id, TestStates
-from requests.question_requests import question_repository
-from requests.statistics_requests import statistics_repository
+from requests.question_requests import question_requests
+from requests.statistics_requests import statistics_requests
 from bot.utils.test_manager import TestManager
 from keyboards.menu import question_menu_keyboard
 from aiogram.fsm.context import FSMContext
+from bot.utils.streak_manager import streak_manager
 
 topic_router = Router()
 question_keyboard = InlineKeyboardBuilder()
@@ -21,7 +22,7 @@ async def start_topic(callback: CallbackQuery, state: FSMContext):
         await callback.answer("Неверный номер темы", show_alert=True)
         return
 
-    test_manager = TestManager(question_repository)
+    test_manager = TestManager(question_requests)
     try:
         question = await test_manager.start_topic(topic_number)
     except Exception as e:
@@ -108,8 +109,8 @@ async def next_question(callback: CallbackQuery, state: FSMContext):
         # Тест окончен
         results = test_manager.get_results()
         user = callback.from_user
-        await statistics_repository.update_user_stats(results, user)
-        await statistics_repository.update_streak(user)
+        await statistics_requests.update_user_stats(results, user)
+        await streak_manager.update_streak(user)
 
         await callback.message.answer(
             f"<b>📊 Тест завершён!</b>\n"

@@ -6,13 +6,13 @@ class Database:
     def __init__(self):
         self.pool: Optional[asyncpg.Pool] = None
 
-    async def connect(self, user, password, database, host, port):
+    async def connect(self):
         self.pool = await asyncpg.create_pool(
-            user=user,
-            password=password,
-            database=database,
-            host=host,
-            port=port,
+            user="postgres",
+            password="1234",
+            database="pdd_database",
+            host="localhost",
+            port=5432,
             min_size=5,
             max_size=10
         )
@@ -30,7 +30,7 @@ class Database:
 
     async def execute(self, query, *args):
         async with self.pool.acquire() as conn:
-            return await self.pool.execute(query, *args)
+            return await conn.execute(query, *args)
 
 
 db = Database()
