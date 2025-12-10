@@ -1,4 +1,4 @@
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
@@ -45,7 +45,7 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
 
         await state.update_data(test_manager=test_manager)
         await state.set_state(TestStates.waiting_for_answer)
-        await show_question(callback, question, len(test_manager.questions), test_manager.current_question_index)
+        await show_question(callback.message, question, len(test_manager.questions), test_manager.current_question_index)
 
     else:
         try:
@@ -56,36 +56,31 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
 
             await state.update_data(test_manager=test_manager)
             await state.set_state(TestStates.waiting_for_answer)
-            await show_question(callback, question, len(test_manager.questions), test_manager.current_question_index)
+            await show_question(callback.message, question, len(test_manager.questions), test_manager.current_question_index)
         except ValueError:
             await callback.answer("Ошибка в начале марафона")
 
 
-@ticket_router.callback_query(TestStates.waiting_for_answer, F.data.startswith("answer"))
-async def user_answer(callback: CallbackQuery, state: FSMContext):
+@ticket_router.message(TestStates.waiting_for_answer, F.text.in_(["1","2","3","4"]))
+async def user_answer(message: Message, state: FSMContext):
     data = await state.get_data()
     test_manager: TestManager = data.get("test_manager")
 
     if not test_manager:
-        await callback.answer("Тест устарел. Начните заново", show_alert=True)
+        await message.answer("Тест устарел. Начните заново")
         await state.clear()
         return
-
-    try:
-        await callback.message.delete()
-    except TelegramBadRequest:
-        pass
 
     current_question = test_manager.get_current_question()
     if not current_question:
-        await callback.answer("Вопрос не доступен", show_alert=True)
+        await message.answer("Вопрос не доступен")
         await state.clear()
         return
 
     try:
-        answer_id = int(callback.data.replace("answer", ""))
+        answer_id = int(message.text)
     except ValueError:
-        await callback.answer("Неверный ответ", show_alert=True)
+        await message.answer("Неверный ответ")
         return
 
     test_manager.save_answer(answer_id)
@@ -100,15 +95,15 @@ async def user_answer(callback: CallbackQuery, state: FSMContext):
         f"Объяснение:\n{current_question.answer_explanation}"
     )
 
-    await callback.message.answer(full_msg, reply_markup=question_menu_keyboard)
+    await message.answer(full_msg, reply_markup=question_menu_keyboard)
     await state.set_state(TestStates.showing_explanation)
     await state.update_data(test_manager=test_manager)
 
 
-@ticket_router.callback_query(TestStates.showing_explanation, F.data == "next")
-async def next_question(callback: CallbackQuery, state: FSMContext):
+@ticket_router.message(TestStates.showing_explanation, F.text == "Следующий")
+async def next_question(message: Message, state: FSMContext):
     try:
-        await callback.message.edit_reply_markup(reply_markup=None)
+        await message.edit_reply_markup(reply_markup=None)
     except TelegramBadRequest:
         pass
 
@@ -116,7 +111,7 @@ async def next_question(callback: CallbackQuery, state: FSMContext):
     test_manager: TestManager = data.get("test_manager")
 
     if not test_manager:
-        await callback.answer("Тест завершён", show_alert=True)
+        await message.answer("Тест завершён")
         await state.clear()
         return
 
@@ -125,18 +120,19 @@ async def next_question(callback: CallbackQuery, state: FSMContext):
     if next_q:
         await state.update_data(test_manager=test_manager)
         await state.set_state(TestStates.waiting_for_answer)
-        await show_question(callback, next_q, len(test_manager.questions), test_manager.current_question_index)
+        await show_question(message, next_q, len(test_manager.questions), test_manager.current_question_index)
     else:
         # Тест окончен
         results = test_manager.get_results()
-        user = callback.from_user
+        user = message.from_user
         await statistics_requests.update_user_stats(results, user)
         await streak_manager.update_streak(user)
 
-        await callback.message.answer(
+        await message.answer(
             f"<b>📊 Тест завершён!</b>\n"
             f"✅ Правильных: {results['correct']} из {results['total']}\n"
             f"📈 Результат: {results['percentage']:.1f}%",
-            parse_mode="HTML"
+            parse_mode="HTML",
+            reply_markup=ReplyKeyboardRemove()
         )
         await state.clear()

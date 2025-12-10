@@ -7,15 +7,14 @@ class Database:
         self.pool: Optional[asyncpg.Pool] = None
 
     async def connect(self):
-        self.pool = await asyncpg.create_pool(
-            user="postgres",
-            password="1234",
-            database="pdd_database",
-            host="localhost",
-            port=5432,
-            min_size=5,
-            max_size=10
-        )
+        self.pool = await asyncpg.create_pool(user="postgres",
+                                              password="1234",
+                                              database="pdd_database",
+                                              host="localhost",
+                                              port=5432,
+                                              min_size=5,
+                                              max_size=10
+                                              )
 
     async def close(self):
         await self.pool.close()

@@ -1,12 +1,12 @@
-from aiogram.types import KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from requests.question_requests import question_requests
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder, ReplyKeyboardMarkup
 
 main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="📋Билеты", callback_data="tickets"),
      InlineKeyboardButton(text="📚Темы", callback_data="topics")],
-    [InlineKeyboardButton(text="🏃‍♂️Марафон (800 вопросов подряд)", callback_data="ticket_marathon")],
-    [InlineKeyboardButton(text="📈Просмотреть статистику", callback_data="stats")]
+    [InlineKeyboardButton(text="🏃‍♂️Марафон (800 вопросов)", callback_data="ticket_marathon")],
+    [InlineKeyboardButton(text="📈Просмотреть статистику", callback_data="stats")],
+    [InlineKeyboardButton(text="⭐Задонатить", callback_data="donate")]
 ])
 
 
@@ -55,16 +55,33 @@ async def make_topics_list():
 
 
 async def make_question_keyboard(question):
-    question_keyboard = InlineKeyboardBuilder()
+    buttons = []
+    row = []
+
     for i in range(1, len(question.answers) + 1):
-        question_keyboard.add(InlineKeyboardButton(text=f"{i}", callback_data=f"answer{i}"))
-    return question_keyboard.adjust(len(question.answers)).as_markup()
+        row.append(KeyboardButton(text=str(i)))
+        if len(row) == 2:  # по 2 в ряд
+            buttons.append(row)
+            row = []
+
+    if row:  # если осталась одна кнопка
+        buttons.append(row)
+
+    return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
 
-question_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Следующий", callback_data="next")]
-])
+question_menu_keyboard = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Следующий")]],
+    resize_keyboard=True
+)
 
 statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
+])
+
+# Клавиатура для меню доната
+donate_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Пожертвовать 1 звезду", callback_data="donate_1")],
+    [InlineKeyboardButton(text="Пожертвовать 25 звезд", callback_data="donate_25")],
+    [InlineKeyboardButton(text="Пожертвовать 50 звезд", callback_data="donate_50")],
 ])

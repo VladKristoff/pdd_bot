@@ -1,13 +1,16 @@
 from aiogram import Router
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
 from keyboards.menu import main_keyboard
 from bot.utils.streak_manager import streak_manager
+from aiogram.fsm.context import FSMContext
+
 
 start_router = Router()
 
 @start_router.message(CommandStart())
-async def start_bot(message: Message):
+async def start_bot(message: Message, state: FSMContext):
+    await state.clear()
     user = message.from_user
 
     # Сбрасываем стрик, если пользователь пропустил день
@@ -32,9 +35,10 @@ async def start_bot(message: Message):
 
 Этот бот поможет вам выучить теорию ПДД
 
-{text}
-
-👇 <b>Выберите действие:</b> 👇
-""",
+{text}""",
                          parse_mode="HTML",
-                         reply_markup=main_keyboard)
+                         reply_markup=ReplyKeyboardRemove())
+
+    await message.answer(text=f"👇<b>Выберите действие:</b> 👇",
+                         reply_markup=main_keyboard,
+                         parse_mode="HTML")
