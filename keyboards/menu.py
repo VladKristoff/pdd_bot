@@ -78,10 +78,3 @@ question_menu_keyboard = ReplyKeyboardMarkup(
 statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
 ])
-
-# Клавиатура для меню доната
-donate_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Пожертвовать 1 звезду", callback_data="donate_1")],
-    [InlineKeyboardButton(text="Пожертвовать 25 звезд", callback_data="donate_25")],
-    [InlineKeyboardButton(text="Пожертвовать 50 звезд", callback_data="donate_50")],
-])

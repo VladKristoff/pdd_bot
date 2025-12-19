@@ -87,13 +87,3 @@ async def show_user_stats_cmd(message: Message, state: FSMContext):
         parse_mode="HTML",
         reply_markup=statistic_menu_keyboard
     )
-
-
-@menu_router.callback_query(F.data == "donate")
-async def donate(callback: CallbackQuery, state: FSMContext):
-    await state.clear()
-    await callback.message.answer(
-        "Пожертвование производится телеграм-звездами.\n<b>Выберите сумму:</b>",
-        parse_mode="HTML",
-        reply_markup=donate_menu_keyboard
-    )
