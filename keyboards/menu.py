@@ -5,8 +5,7 @@ main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="📋Билеты", callback_data="tickets"),
      InlineKeyboardButton(text="📚Темы", callback_data="topics")],
     [InlineKeyboardButton(text="🏃‍♂️Марафон (800 вопросов)", callback_data="ticket_marathon")],
-    [InlineKeyboardButton(text="📈Просмотреть статистику", callback_data="stats")],
-    [InlineKeyboardButton(text="⭐Задонатить", callback_data="donate")]
+    [InlineKeyboardButton(text="📈Просмотреть статистику", callback_data="stats")]
 ])
 
 
