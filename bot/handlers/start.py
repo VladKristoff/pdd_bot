@@ -27,7 +27,7 @@ async def start_bot(message: Message, state: FSMContext):
             
 <b>Ваша серия: {streak}</b>"""
     else:
-        text = "Не удалось получить серию"
+        text = "Решите билет, чтобы начать серию"
 
     # Выводим приветственное сообщение
     await message.answer(text = f"""

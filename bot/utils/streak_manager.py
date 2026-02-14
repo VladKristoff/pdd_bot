@@ -21,7 +21,6 @@ class StreakManager:
 
         try:
             record = await db.fetcher("SELECT streak, last_solved_date FROM users WHERE id = $1", str(user.id))
-            print(record)
             current_streak = record['streak']
             last_date = record['last_solved_date']
         except Exception as e:

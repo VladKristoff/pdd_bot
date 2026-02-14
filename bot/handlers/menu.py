@@ -1,11 +1,31 @@
 from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
-from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard, donate_menu_keyboard
+
+from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard, accept_exam_keyboard
 from requests.statistics_requests import statistics_requests
 
 menu_router = Router()
 
+text = """Режим "Экзамен" полностью имитирует официальный тест в ГИБДД. 
+Вам будет предложено 20 случайных вопросов. На выполнение дается 20 минут. 
+Чтобы успешно сдать, нужно ответить на все вопросы, допустив не более 2 ошибок. Если ошибок 3 или больше, либо две ошибки будут сделаны в одном тематическом блоке, экзамен считается несданным. 
+Во время прохождения подсказки и возможность исправить ответ недоступны — всё как на реальном экзамене. 
+Результат и разбор ошибок вы увидите после завершения теста.
+    
+<b>Начать экзамен?</b>"""
+
+@menu_router.message(F.text == "/exam")
+async def show_exam_description(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer(text, reply_markup=accept_exam_keyboard,
+                         parse_mode="HTML")
+
+@menu_router.callback_query(F.data == "exam")
+async def show_exam_description(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.answer(text, reply_markup=accept_exam_keyboard,
+                                  parse_mode="HTML")
 
 @menu_router.callback_query(F.data == "tickets")
 async def show_tickets(callback: CallbackQuery, state: FSMContext):
