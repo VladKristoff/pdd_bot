@@ -2,7 +2,6 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardBu
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder, ReplyKeyboardMarkup
 
 main_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="🎓Экзамен", callback_data="exam")],
     [InlineKeyboardButton(text="📋Билеты", callback_data="tickets"),
      InlineKeyboardButton(text="📚Темы", callback_data="topics")],
     [InlineKeyboardButton(text="🏃‍♂️Марафон (800 вопросов)", callback_data="ticket_marathon")],
