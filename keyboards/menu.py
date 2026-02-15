@@ -78,7 +78,3 @@ question_menu_keyboard = ReplyKeyboardMarkup(
 statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
 ])
-
-accept_exam_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Начать", callback_data="start_exam")],
-])
