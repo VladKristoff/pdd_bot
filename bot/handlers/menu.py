@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 
-from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard, accept_exam_keyboard
+from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard
 from requests.statistics_requests import statistics_requests
 
 menu_router = Router()
