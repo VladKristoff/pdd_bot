@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery, Message
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
 from bot.utils.test_system import show_question, get_correct_answer_id, TestStates, get_user_answer

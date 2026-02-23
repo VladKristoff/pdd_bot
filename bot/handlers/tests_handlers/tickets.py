@@ -1,5 +1,4 @@
 from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
 from bot.utils.test_system import TestStates, show_question, get_correct_answer_id, get_user_answer
@@ -8,6 +7,7 @@ from requests.question_requests import question_requests
 from keyboards.menu import question_menu_keyboard
 from aiogram.fsm.context import FSMContext
 from bot.utils.streak_manager import streak_manager
+import random
 
 from ...utils.test_manager import TestManager
 
@@ -24,8 +24,10 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
 
     test_manager = TestManager(question_requests)
 
-    if ticket_number != "marathon":
-        try:
+    if ticket_number != "marathon": # Проверка, начал ли пользователь марафон
+        if ticket_number == "random": # Проверка, выбрал ли пользователь случайный билет
+            ticket_number = random.randint(1, 41) # Если выбрал случайный билет, то ticket_number ->
+        try:                                            # меняется с random на случайное число от 1 до 40
             ticket_number_in_bd = f"Билет {ticket_number}"
         except ValueError:
             await callback.answer("Ошибка в начале билета")
