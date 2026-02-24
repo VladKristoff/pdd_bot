@@ -23,8 +23,10 @@ async def show_tickets_command(message: Message, state: FSMContext):
     await message.answer("Загрузка меню билетов...", reply_markup=ReplyKeyboardRemove())
 
     await message.answer(
-        "Выберите билет, который хотите решить",
-        reply_markup=await make_tickets_list()
+        """Выберите билет, который хотите решить.
+<b>?</b> - случайный билет.""",
+        reply_markup=await make_tickets_list(),
+        parse_mode="HTML"
     )
 
 

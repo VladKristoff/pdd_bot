@@ -7,7 +7,6 @@ from bot.handlers.start import start_router
 from bot.handlers.menu import menu_router
 from bot.handlers.tests_handlers.topics import topic_router
 from bot.handlers.tests_handlers.tickets import ticket_router
-from bot.handlers.tests_handlers.exam import exam_router
 from bot.handlers.statistics_menu import stats_router
 from bot.utils.command_menu import commands
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -30,7 +29,6 @@ async def main():
     dp.include_router(ticket_router)
     dp.include_router(topic_router)
     dp.include_router(stats_router)
-    dp.include_router(exam_router)
 
     await db.connect()
     await dp.start_polling(bot)
