@@ -34,6 +34,7 @@ async def start_ticket(callback: CallbackQuery, state: FSMContext):
             return
 
         try:
+            await callback.answer(f"Билет №{ticket_number}")
             question = await test_manager.start_ticket(ticket_number_in_bd)
         except Exception as e:
             print(f"Ошибка в загрузке билета {ticket_number_in_bd}: {e}")

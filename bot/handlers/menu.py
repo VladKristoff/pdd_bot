@@ -24,7 +24,7 @@ async def show_tickets_command(message: Message, state: FSMContext):
 
     await message.answer(
         """Выберите билет, который хотите решить.
-<b>?</b> - случайный билет.""",
+<b>? - случайный билет.</b>""",
         reply_markup=await make_tickets_list(),
         parse_mode="HTML"
     )
