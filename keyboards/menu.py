@@ -48,6 +48,7 @@ async def make_topics_list():
         "Безопасность движения и техника управления автомобилем",
         "Остановка и стоянка"
     ]
+    topics_keyboard.add(InlineKeyboardButton(text="Случайная тема", callback_data="topic_random"))
     for i, topic in enumerate(topics):
         topics_keyboard.add(InlineKeyboardButton(text=f"{topic}", callback_data=f"topic_{i+1}"))
 

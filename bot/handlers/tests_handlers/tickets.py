@@ -8,7 +8,6 @@ from keyboards.menu import question_menu_keyboard
 from aiogram.fsm.context import FSMContext
 from bot.utils.streak_manager import streak_manager
 import random
-
 from ...utils.test_manager import TestManager
 
 ticket_router = Router()

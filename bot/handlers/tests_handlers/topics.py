@@ -1,3 +1,5 @@
+import random
+
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
 from aiogram.exceptions import TelegramBadRequest
@@ -15,13 +17,18 @@ topic_router = Router()
 @topic_router.callback_query(F.data.startswith("topic_"))
 async def start_topic(callback: CallbackQuery, state: FSMContext):
     try:
-        topic_number = int(callback.data.replace("topic_", ""))
+        topic_number = callback.data.replace("topic_", "")
+        if topic_number == "random":
+            topic_number = random.randint(1, 27)
+        else:
+            topic_number = int(topic_number)
     except ValueError:
         await callback.answer("Неверный номер темы", show_alert=True)
         return
 
     test_manager = TestManager(question_requests)
     try:
+        await callback.answer(f"Тема №{topic_number}")
         question = await test_manager.start_topic(topic_number)
     except Exception as e:
         print(f"Ошибка загрузки темы {topic_number}: {e}")
