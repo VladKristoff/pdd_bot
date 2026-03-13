@@ -51,27 +51,28 @@ def get_correct_answer_id(question: Question):
     raise ValueError(f"Не найден правильный ответ для вопроса: {question.id}")
 
 async def get_user_answer(message: Message, state: FSMContext):
+    user = message.from_user # Получаем user для использования в test_manager (для сохранения статистики после каждого вопроса)
     data = await state.get_data()
     test_manager: TestManager = data.get("test_manager")
 
     if not test_manager:
         await message.answer("Тест устарел. Начните заново")
         await state.clear()
-        return
+        return None
 
     current_question = test_manager.get_current_question()
     if not current_question:
         await message.answer("Вопрос не доступен")
         await state.clear()
-        return
+        return None
 
     try:
         answer_id = int(message.text)
     except ValueError:
         await message.answer("Неверный ответ")
-        return
+        return None
 
-    test_manager.save_answer(answer_id)
+    await test_manager.save_answer(answer_id, user)
 
     correct_answer_number = get_correct_answer_id(current_question) # 1-based
     is_correct = (answer_id == correct_answer_number)

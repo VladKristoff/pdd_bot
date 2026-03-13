@@ -1,6 +1,7 @@
 from database.models import Question
 from requests.question_requests import QuestionRequests
 from typing import List, Dict, Optional
+from requests.statistics_requests import statistics_requests
 
 
 class TestManager:
@@ -47,8 +48,31 @@ class TestManager:
             return self.get_current_question()
         return None
 
-    def save_answer(self, answer_id: int):
+    async def save_answer(self, answer_id: int, user):
         self.user_answers[self.current_question_index] = answer_id
+
+        # Получаем текущий вопрос
+        current_question = self.get_current_question()
+        if not current_question:
+            return False
+
+        # Проверяем, правильный ли ответ
+        is_correct = False
+        for i, answer in enumerate(current_question.answers, 1):
+            if answer['is_correct'] and i == answer_id:
+                is_correct = True
+                break
+
+        # Создаем  результат только для этого вопроса
+        question_result = {
+            "correct": 1 if is_correct else 0,
+            "total": 1
+        }
+
+        # Обновляем статистику в БД
+        await statistics_requests.update_user_stats(question_result, user)
+
+        return is_correct
 
     def get_results(self) -> Dict:
         correct = 0
