@@ -16,7 +16,8 @@ class QuestionRequests:
                                      correct_answer=question['correct_answer'],
                                      image_path=question['image_path'],
                                      answer_explanation=question['answer_explanation'],
-                                     question_number_in_ticket=question['question_number_in_ticket'])
+                                     question_number_in_ticket=question['question_number_in_ticket'],
+                                     topic_id=question['topic_id'])
 
             questions.append(question_data)
 
@@ -33,24 +34,12 @@ class QuestionRequests:
                                      correct_answer=question['correct_answer'],
                                      image_path=question['image_path'],
                                      answer_explanation=question['answer_explanation'],
-                                     question_number_in_ticket=question['question_number_in_ticket'])
+                                     question_number_in_ticket=question['question_number_in_ticket'],
+                                     topic_id=question['topic_id'])
 
             questions.append(question_data)
 
         return questions
-
-    async def get_question_by_id(self, question_id: str) -> Question:
-        record = await db.fetcher("SELECT * FROM questions WHERE id = $1", question_id)
-        if record:
-            return Question(
-                id=record['id'],
-                question_text=record['question_text'],
-                answers=json.loads(record['answers']),
-                correct_answer=record['correct_answer'],
-                image_path=record['image_path'],
-                answer_explanation=record['answer_explanation'],
-                question_number_in_ticket=record['question_number_in_ticket']
-            )
 
     async def get_all_questions(self) -> List[Question]:
         ticket_data = await db.fetch("SELECT * FROM questions")
@@ -63,7 +52,8 @@ class QuestionRequests:
                                      correct_answer=question['correct_answer'],
                                      image_path=question['image_path'],
                                      answer_explanation=question['answer_explanation'],
-                                     question_number_in_ticket=question['question_number_in_ticket'])
+                                     question_number_in_ticket=question['question_number_in_ticket'],
+                                     topic_id=question['topic_id'])
 
             questions.append(question_data)
 

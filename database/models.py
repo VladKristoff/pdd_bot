@@ -10,3 +10,4 @@ class Question(BaseModel):
     image_path: str = None
     answer_explanation: str
     question_number_in_ticket: int
+    topic_id: int

@@ -51,6 +51,8 @@ class TestManager:
     async def save_answer(self, answer_id: int, user):
         self.user_answers[self.current_question_index] = answer_id
 
+        topic_id = self.questions[self.current_question_index].topic_id
+
         # Получаем текущий вопрос
         current_question = self.get_current_question()
         if not current_question:
@@ -71,6 +73,7 @@ class TestManager:
 
         # Обновляем статистику в БД
         await statistics_requests.update_user_stats(question_result, user)
+        await statistics_requests.update_topic_stat(str(user.id), topic_id, is_correct)
 
         return is_correct
 
