@@ -51,5 +51,10 @@ question_menu_keyboard = ReplyKeyboardMarkup(
 )
 
 statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Сбросить статистику", callback_data="reset_stats")]
+    [InlineKeyboardButton(text="🗑️Сбросить статистику", callback_data="reset_stats")],
+    [InlineKeyboardButton(text="📊Стастистика по темам", callback_data="get_topic_stats")]
+])
+
+topic_statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="⬅️Назад", callback_data="back_to_stats_menu")]
 ])

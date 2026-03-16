@@ -94,7 +94,6 @@ async def next_question(message: Message, state: FSMContext):
         # Тест окончен
         results = test_manager.get_results()
         user = message.from_user
-        await statistics_requests.update_user_stats(results, user)
         await streak_manager.update_streak(user)
 
         await message.answer(
