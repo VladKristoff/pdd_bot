@@ -14,7 +14,8 @@ async def show_tickets(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         """Выберите билет, который хотите решить:
 <b>? - случайный билет.</b>""",
-        reply_markup=await make_tickets_list()
+        reply_markup=await make_tickets_list(),
+        parse_mode="HTML"
     )
 
 

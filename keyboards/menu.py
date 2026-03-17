@@ -14,6 +14,9 @@ async def make_tickets_list():
     tickets_keyboard.add(InlineKeyboardButton(text="?", callback_data="ticket_random"))
     for number in range(1, 41):
         tickets_keyboard.add(InlineKeyboardButton(text=str(number), callback_data=f"ticket_{number}"))
+
+    tickets_keyboard.add(InlineKeyboardButton(text="⬅️Назад", callback_data="back_to_main_menu"))
+
     return tickets_keyboard.adjust(5).as_markup()
 
 
@@ -25,6 +28,8 @@ async def make_topics_list():
     topics_keyboard.add(InlineKeyboardButton(text="Случайная тема", callback_data="topic_random"))
     for i, topic in enumerate(TOPICS):
         topics_keyboard.add(InlineKeyboardButton(text=f"{topic}", callback_data=f"topic_{i+1}"))
+
+    topics_keyboard.add(InlineKeyboardButton(text="⬅️Назад", callback_data="back_to_main_menu"))
 
     return topics_keyboard.adjust(1).as_markup()
 
@@ -51,6 +56,7 @@ question_menu_keyboard = ReplyKeyboardMarkup(
 )
 
 statistic_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="⬅️Назад", callback_data="back_to_main_menu")],
     [InlineKeyboardButton(text="🗑️Сбросить статистику", callback_data="reset_stats")],
     [InlineKeyboardButton(text="📊Стастистика по темам", callback_data="get_topic_stats")]
 ])

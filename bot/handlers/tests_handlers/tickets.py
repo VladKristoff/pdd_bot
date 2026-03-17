@@ -4,10 +4,12 @@ from aiogram.exceptions import TelegramBadRequest
 from bot.utils.test_system import TestStates, show_question, get_correct_answer_id, get_user_answer
 from requests.statistics_requests import statistics_requests
 from requests.question_requests import question_requests
-from keyboards.menu import question_menu_keyboard
+from keyboards.menu import question_menu_keyboard, main_keyboard
 from aiogram.fsm.context import FSMContext
 from bot.utils.streak_manager import streak_manager
 import random
+
+from ..start import start_bot
 from ...utils.test_manager import TestManager
 
 ticket_router = Router()
@@ -104,3 +106,8 @@ async def next_question(message: Message, state: FSMContext):
             reply_markup=ReplyKeyboardRemove()
         )
         await state.clear()
+
+@ticket_router.callback_query(F.data == "back_to_main_menu")
+async def back_to_main_menu(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await start_bot(callback.message, state, callback.from_user)
