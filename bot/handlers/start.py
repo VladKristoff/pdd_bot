@@ -1,5 +1,4 @@
 from aiogram import Router
-from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 from keyboards.menu import main_keyboard
