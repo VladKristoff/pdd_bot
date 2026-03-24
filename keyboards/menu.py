@@ -23,15 +23,13 @@ async def make_tickets_list():
 async def make_topics_list():
     topics_keyboard = InlineKeyboardBuilder()
 
-    from misc.utils.consts import TOPICS # Импортируем список тем из файла с константами
-
-    topics_keyboard.add(InlineKeyboardButton(text="Случайная тема", callback_data="topic_random"))
-    for i, topic in enumerate(TOPICS):
-        topics_keyboard.add(InlineKeyboardButton(text=f"{topic}", callback_data=f"topic_{i+1}"))
+    topics_keyboard.add(InlineKeyboardButton(text="?", callback_data="topic_random"))
+    for number in range(1, 27):
+        topics_keyboard.add(InlineKeyboardButton(text=f"{number}", callback_data=f"topic_{number}"))
 
     topics_keyboard.add(InlineKeyboardButton(text="⬅️Назад", callback_data="back_to_main_menu"))
 
-    return topics_keyboard.adjust(1).as_markup()
+    return topics_keyboard.adjust(5).as_markup()
 
 
 async def make_question_keyboard(question):

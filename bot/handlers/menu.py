@@ -3,7 +3,7 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 
 from keyboards.menu import make_tickets_list, make_topics_list, statistic_menu_keyboard
-from misc.utils.consts import TOPICS
+from misc.utils.consts import TOPICS # Импортируем список тем из файла с константами
 from requests.statistics_requests import statistics_requests
 
 menu_router = Router()
@@ -36,8 +36,11 @@ async def show_tickets_command(message: Message, state: FSMContext):
 @menu_router.callback_query(F.data == "topics")
 async def show_topics_callback(callback: CallbackQuery, state: FSMContext):
     await state.clear()
+
+    topics_text = "\n".join(TOPICS)
+
     await callback.message.edit_text(
-        "Выберите тему:",
+        topics_text,
         reply_markup=await make_topics_list()
     )
 
@@ -46,10 +49,12 @@ async def show_topics_callback(callback: CallbackQuery, state: FSMContext):
 async def show_topics(message: Message, state: FSMContext):
     await state.clear()
 
-    await message.answer("Загрузка тем...", reply_markup=ReplyKeyboardRemove())
+    await message.answer("Выберите тему:", reply_markup=ReplyKeyboardRemove())
+
+    topics_text = "\n".join(TOPICS)
 
     await message.answer(
-        "Выберите тему:",
+        topics_text,
         reply_markup=await make_topics_list()
     )
 
